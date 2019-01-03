@@ -458,8 +458,10 @@ Command.prototype.parse = function(argv) {
   // store raw args
   this.rawArgs = argv;
 
+  this._scriptName = this._name || basename(argv[1], path.extname(argv[1]));
+
   // guess name
-  this._name = this._name || basename(argv[1], '.js');
+  this._name = this._scriptName;
 
   // github-style sub-commands with no sub-command
   if (this.executables && argv.length < 3 && !this.defaultExecutable) {
@@ -523,7 +525,7 @@ Command.prototype.executeSubCommand = function(argv, args, unknown) {
   // executable
   var f = argv[1];
   // name of the subcommand, link `pm-install`
-  var bin = basename(f, path.extname(f)) + '-' + args[0];
+  var bin = this._scriptName + '-' + args[0];
 
   // In case of globally installed, get the base dir where executable
   //  subcommand file should be located at
